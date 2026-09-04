@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kalkulator BMI</title>
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Tailwind custom config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50:  "#eff6ff",
+                100: "#dbeafe",
+                500: "#3b82f6",
+                600: "#2563eb",
+                700: "#1d4ed8",
+              },
+              accent: {
+                400: "#4ade80",
+                500: "#22c55e",
+                600: "#16a34a",
+              },
+            },
+            fontFamily: {
+              sans: ['"Inter"', "system-ui", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 font-sans text-gray-800 flex items-center justify-center px-4 py-10">
+
+    <main class="w-full max-w-lg">
+
+      <!-- ── Header ── -->
+      <header class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-600 shadow-lg mb-4">
+          <!-- Scale / weight icon (SVG inline) -->
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 6l9-3 9 3M3 6v12l9 3 9-3V6M12 3v18" />
+          </svg>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">Kalkulator BMI</h1>
+        <p class="mt-1 text-sm text-gray-500">Body Mass Index — Ukur kesehatan idealmu</p>
+      </header>
+
+      <!-- ── Form Card ── -->
+      <section
+        class="bg-white rounded-3xl shadow-xl p-6 sm:p-8"
+        aria-label="Form input data BMI"
+      >
+        <form id="bmiForm" novalidate>
+
+          <!-- Row: Jenis Kelamin (full width, radio buttons) -->
+          <div class="mb-5">
+            <p class="form-label mb-2">Jenis Kelamin</p>
+            <div class="gender-radio-group" role="radiogroup" aria-label="Jenis Kelamin">
+
+              <!-- Laki-laki -->
+              <label class="gender-radio-card" for="genderMale">
+                <input
+                  type="radio" id="genderMale"
+                  name="gender" value="male"
+                  class="gender-radio-input"
+                />
+                <span class="gender-radio-icon" aria-hidden="true">
+                  <!-- Male icon -->
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="w-6 h-6">
+                    <circle cx="10" cy="14" r="5"/>
+                    <path stroke-linecap="round" d="M15 9l4-4m0 0h-4m4 0v4"/>
+                  </svg>
+                </span>
+                <span class="gender-radio-text">Laki-laki</span>
+              </label>
+
+              <!-- Perempuan -->
+              <label class="gender-radio-card" for="genderFemale">
+                <input
+                  type="radio" id="genderFemale"
+                  name="gender" value="female"
+                  class="gender-radio-input"
+                />
+                <span class="gender-radio-icon" aria-hidden="true">
+                  <!-- Female icon -->
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="w-6 h-6">
+                    <circle cx="12" cy="8" r="5"/>
+                    <path stroke-linecap="round" d="M12 13v8m-3-3h6"/>
+                  </svg>
+                </span>
+                <span class="gender-radio-text">Perempuan</span>
+              </label>
+
+            </div>
+            <p class="error-msg hidden" id="genderError">Pilih jenis kelamin.</p>
+          </div>
+
+          <!-- Row: Usia (full width) -->
+          <div class="mb-5">
+            <label class="form-label" for="age">Usia (tahun)</label>
+            <input
+              id="age" name="age" type="number"
+              min="5" max="120" placeholder="e.g. 25"
+              class="form-input" required
+            />
+            <p class="error-msg hidden" id="ageError">Usia 5–120 tahun.</p>
+          </div>
+
+          <!-- Tinggi Badan -->
+          <div class="mb-5">
+            <label class="form-label" for="height">
+              Tinggi Badan
+              <span class="unit-toggle ml-2">
+                <button type="button" id="toggleUnit" class="unit-btn active" data-unit="cm">cm</button>
+                <button type="button" class="unit-btn" data-unit="ft">ft</button>
+              </span>
+            </label>
+            <input
+              id="height" name="height" type="number"
+              min="1" step="0.1" placeholder="e.g. 170"
+              class="form-input" required
+            />
+            <p class="error-msg hidden" id="heightError">Masukkan tinggi badan yang valid.</p>
+          </div>
+
+          <!-- Berat Badan -->
+          <div class="mb-6">
+            <label class="form-label" for="weight">Berat Badan (kg)</label>
+            <input
+              id="weight" name="weight" type="number"
+              min="1" step="0.1" placeholder="e.g. 65"
+              class="form-input" required
+            />
+            <p class="error-msg hidden" id="weightError">Masukkan berat badan yang valid (> 0).</p>
+          </div>
+
+          <!-- Submit button -->
+          <button
+            type="submit"
+            id="calcBtn"
+            class="w-full py-3 rounded-2xl bg-primary-600 hover:bg-primary-700 active:scale-95 text-white font-semibold text-base tracking-wide transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-primary-100"
+          >
+            Hitung BMI
+          </button>
+
+        </form>
+      </section>
+
+      <!-- ── Result Card (hidden until calculated) ── -->
+      <section
+        id="resultCard"
+        class="hidden bg-white rounded-3xl shadow-xl p-6 sm:p-8 mt-5 transition-all duration-500"
+        aria-live="polite"
+        aria-label="Hasil perhitungan BMI"
+      >
+        <!-- BMI value & category -->
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Nilai BMI Anda</p>
+            <p id="bmiValue" class="text-5xl font-bold mt-1">—</p>
+            <p id="bmiCategory" class="text-sm font-semibold mt-1">—</p>
+          </div>
+          <!-- Category icon -->
+          <div id="categoryIcon" class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-inner">
+            —
+          </div>
+        </div>
+
+        <!-- Progress bar / indicator -->
+        <div class="mb-5">
+          <div class="bmi-scale-track">
+            <div id="bmiIndicator" class="bmi-scale-indicator"></div>
+          </div>
+          <div class="flex justify-between text-xs text-gray-400 mt-1 px-0.5">
+            <span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span>
+          </div>
+        </div>
+
+        <!-- Recommendation -->
+        <div id="recommendation" class="rounded-2xl p-4 text-sm leading-relaxed"></div>
+
+        <!-- Reset button -->
+        <button
+          type="button"
+          id="resetBtn"
+          class="mt-5 w-full py-2.5 rounded-2xl border-2 border-primary-500 text-primary-600 font-semibold hover:bg-primary-50 active:scale-95 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-primary-100"
+        >
+          Hitung Ulang
+        </button>
+      </section>
+
+      <!-- ── Footer ── -->
+      <footer class="text-center mt-8 text-xs text-gray-400">
+        © 2025 Kalkulator BMI &mdash; Informasi ini bukan pengganti saran medis profesional.
+      </footer>
+
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
